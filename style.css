@@ -1,0 +1,264 @@
+/* Estilos básicos */
+body, html {
+margin: 0;
+padding: 0;
+width: 100%;
+height: 100%;
+overflow: hidden;
+font-family: verdana; /* Añadido de tu ejemplo */
+}
+ 
+.mindar-container {
+width: 100%;
+height: 100%;
+position: relative;
+}
+ 
+/* Contenedor de botones (overlay) */
+.controls {
+position: absolute;
+bottom: 20px;
+left: 0;
+width: 100%;
+z-index: 10;
+display: flex;
+justify-content: center;
+align-items: center;
+flex-wrap: wrap;
+gap: 10px;
+}
+ 
+/* Estilo base para todos los botones (y enlaces como botones) */
+.controls button,
+.controls a {
+padding: 10px 15px;
+font-size: 14px;
+font-weight: bold;
+border: none;
+border-radius: 8px;
+cursor: pointer;
+transition: all 0.3s ease;
+box-shadow: 0 4px 10px rgba(0,0,0,0.2);
+text-decoration: none;
+text-transform: uppercase;
+display: inline-block;
+line-height: 1.2;
+}
+ 
+/* Botón Inicial (Estilo simple) */
+.btn-inicial {
+background-color: #f0f0f0;
+color: #333;
+border: 2px solid #ccc;
+}
+.btn-inicial:hover {
+background-color: #ddd;
+}
+ 
+/* --- Estilos y Animaciones Únicas --- */
+ 
+/* Botón 1: Pulso brillante */
+@keyframes pulse {
+0% { box-shadow: 0 0 0 0 rgba(0, 119, 255, 0.7); }
+70% { box-shadow: 0 0 0 10px rgba(0, 119, 255, 0); }
+100% { box-shadow: 0 0 0 0 rgba(0, 119, 255, 0); }
+}
+.btn-1 {
+background-color: #007bff;
+color: white;
+animation: pulse 2s infinite;
+}
+.btn-1:hover {
+transform: scale(1.05);
+}
+ 
+/* Botón 2: Sacudida (Shake) */
+@keyframes shake {
+0%, 100% { transform: translateX(0); }
+10%, 30%, 50%, 70%, 90% { transform: translateX(-5px); }
+20%, 40%, 60%, 80% { transform: translateX(5px); }
+}
+.btn-2 {
+background-color: #28a745;
+color: white;
+}
+.btn-2:hover {
+animation: shake 0.5s ease-in-out;
+}
+ 
+/* Botón 3: Cambio de color */
+@keyframes color-change {
+0% { background-color: #ffc107; }
+50% { background-color: #e0a800; }
+100% { background-color: #ffc107; }
+}
+.btn-3 {
+color: #333;
+animation: color-change 3s infinite linear;
+}
+ 
+/* Botón 4: Efecto 3D (Flip) */
+.btn-4 {
+background-color: #dc3545;
+color: white;
+transition: transform 0.5s;
+transform-style: preserve-3d;
+}
+.btn-4:hover {
+transform: rotateY(180deg);
+}
+ 
+/* Botón 5: Rebote */
+@keyframes bounce {
+0%, 100% { transform: translateY(0); }
+50% { transform: translateY(-8px); }
+}
+.btn-5 {
+background-color: #17a2b8;
+color: white;
+}
+.btn-5:hover {
+animation: bounce 0.5s ease;
+}
+ 
+/* Botón 6: Borde animado */
+.btn-6 {
+background-color: #343a40;
+color: white;
+position: relative;
+overflow: hidden;
+border: 2px solid transparent;
+}
+.btn-6::before {
+content: '';
+position: absolute;
+top: -50%;
+left: -50%;
+width: 200%;
+height: 200%;
+background: conic-gradient(
+transparent,
+rgba(108, 117, 125, 0.8),
+transparent 30%
+);
+animation: rotate 4s linear infinite;
+}
+.btn-6:hover::before {
+animation-play-state: paused;
+}
+@keyframes rotate {
+100% { transform: rotate(360deg); }
+}
+ 
+/* --- Botón 7: Efecto Flip 3D (Adaptado) --- */
+.controls a.btn-7 {
+padding: 0;
+box-shadow: none;
+border-radius: 0;
+background: none;
+/* El font-size se hereda de '.controls a' */
+}
+ 
+.controls a.btn-7 span {
+padding: 10px 15px; /* Ajustado */
+font-size: 14px; /* Ajustado */
+transition: .5s;
+position: relative;
+display: inline-block;
+box-shadow: 0 4px 10px rgba(0,0,0,0.2);
+}
+ 
+.controls a.btn-7 span:nth-child(1) {
+color: #fff;
+background: #262626;
+border-top-left-radius: 8px;
+border-bottom-left-radius: 8px;
+}
+ 
+.controls a.btn-7 span:nth-child(2) {
+color: #fff;
+background: #ff3636;
+border-top-right-radius: 8px;
+border-bottom-right-radius: 8px;
+margin-left: -5px; /* Unimos los botones */
+}
+ 
+.controls a.btn-7 span:nth-child(1):before {
+content: attr(data-attr);
+position: absolute;
+top: 0;
+left: 0;
+background: #ff3636;
+padding: 10px 15px; /* Ajustado */
+transition: 0.5S;
+transform-origin: top;
+transform: rotateX(90deg) translateY(-50%);
+width: 100%;
+box-sizing: border-box;
+border-top-left-radius: 8px;
+border-bottom-left-radius: 8px;
+}
+ 
+.controls a.btn-7:hover span:nth-child(1):before {
+transform: rotateX(0deg) translateY(0%);
+}
+ 
+.controls a.btn-7 span:nth-child(2):before {
+content: attr(data-attr);
+position: absolute;
+top: 0;
+left: 0;
+background: #262626;
+padding: 10px 15px; /* Ajustado */
+transition: 0.5S;
+transform-origin: bottom;
+transform: rotateX(90deg) translateY(50%);
+width: 100%;
+box-sizing: border-box;
+border-top-right-radius: 8px;
+border-bottom-right-radius: 8px;
+}
+ 
+.controls a.btn-7:hover span:nth-child(2):before {
+transform: rotateX(0deg) translateY(0%);
+}
+ 
+.controls a.btn-7 span:nth-child(1):after {
+content: attr(data-attr);
+padding: 10px 15px; /* Ajustado */
+position: absolute;
+top: 0;
+left: 0;
+background: #262626;
+transform-origin: bottom;
+transform: rotateX(0deg) translateY(0%);
+transition: 0.5s;
+width: 100%;
+box-sizing: border-box;
+border-top-left-radius: 8px;
+border-bottom-left-radius: 8px;
+}
+ 
+.controls a.btn-7:hover span:nth-child(1):after {
+transform: rotateX(90deg) translateY(50%);
+}
+ 
+.controls a.btn-7 span:nth-child(2):after {
+content: attr(data-attr);
+position: absolute;
+top: 0;
+left: 0;
+background: #ff3636;
+padding: 10px 15px; /* Ajustado */
+transition: 0.5S;
+transform-origin: top;
+transform: rotateX(0deg) translateY(0%);
+width: 100%;
+box-sizing: border-box;
+border-top-right-radius: 8px;
+border-bottom-right-radius: 8px;
+}
+ 
+.controls a.btn-7:hover span:nth-child(2):after {
+transform: rotateX(90deg) translateY(-50%);
+}
