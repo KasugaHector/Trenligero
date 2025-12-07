@@ -150,6 +150,40 @@
             font-size: 0.9rem;
         }
         
+        .scan-area {
+            margin: 20px auto;
+            padding: 20px;
+            border: 3px dashed #ffde59;
+            border-radius: 15px;
+            width: 90%;
+            max-width: 400px;
+            background-color: rgba(255, 255, 255, 0.05);
+            transition: all 0.3s ease;
+        }
+        
+        .scan-area.active {
+            border-color: #4CAF50;
+            background-color: rgba(76, 175, 80, 0.1);
+            animation: pulse 1.5s infinite;
+        }
+        
+        @keyframes pulse {
+            0% { box-shadow: 0 0 0 0 rgba(76, 175, 80, 0.4); }
+            70% { box-shadow: 0 0 0 15px rgba(76, 175, 80, 0); }
+            100% { box-shadow: 0 0 0 0 rgba(76, 175, 80, 0); }
+        }
+        
+        .scan-area h3 {
+            color: #ffde59;
+            margin-bottom: 10px;
+        }
+        
+        .nfc-icon {
+            font-size: 3rem;
+            margin: 15px 0;
+            color: #ffde59;
+        }
+        
         .scan-button {
             background: linear-gradient(to right, #ffde59, #ffcc00);
             color: #1a3a8f;
@@ -172,6 +206,40 @@
         
         .scan-button:active {
             transform: scale(0.98);
+        }
+        
+        .scan-button:disabled {
+            background: #cccccc;
+            cursor: not-allowed;
+            transform: none;
+            box-shadow: none;
+        }
+        
+        .status-message {
+            margin-top: 15px;
+            padding: 10px;
+            border-radius: 8px;
+            background-color: rgba(255, 255, 255, 0.1);
+            font-size: 0.9rem;
+            min-height: 40px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+        
+        .status-success {
+            background-color: rgba(76, 175, 80, 0.2);
+            color: #a5d6a7;
+        }
+        
+        .status-error {
+            background-color: rgba(244, 67, 54, 0.2);
+            color: #ef9a9a;
+        }
+        
+        .status-scanning {
+            background-color: rgba(33, 150, 243, 0.2);
+            color: #90caf9;
         }
         
         .map-section {
@@ -287,6 +355,16 @@
             100% { transform: translateY(-90px); }
         }
         
+        .compatibility-notice {
+            background-color: rgba(255, 193, 7, 0.2);
+            border-left: 4px solid #ffc107;
+            padding: 12px;
+            border-radius: 5px;
+            margin-top: 15px;
+            font-size: 0.85rem;
+            color: #ffecb3;
+        }
+        
         footer {
             margin-top: 40px;
             text-align: center;
@@ -325,8 +403,23 @@
         </header>
         
         <section class="metro-card-section">
-            <h2>Tarjeta del Metro CDMX</h2>
-            <p>Coloca tu tarjeta en el área de abajo para escanear</p>
+            <h2>Escanear Tarjeta del Metro CDMX</h2>
+            <p>Usa la tecnología NFC de tu dispositivo para escanear tu tarjeta</p>
+            
+            <div class="scan-area" id="scanArea">
+                <h3>Zona de Escaneo NFC</h3>
+                <div class="nfc-icon">⎙</div>
+                <p>Acerca tu tarjeta del Metro a esta área</p>
+                <div class="status-message" id="statusMessage">
+                    Listo para escanear tarjeta del Metro CDMX
+                </div>
+            </div>
+            
+            <button class="scan-button" id="scanButton">Iniciar Escáner NFC</button>
+            
+            <div class="compatibility-notice">
+                <strong>Nota:</strong> Esta función requiere un dispositivo con NFC y Chrome para Android. Si no tienes NFC, puedes usar el modo de demostración.
+            </div>
             
             <div class="metro-card" id="metroCard">
                 <div class="card-header">
@@ -341,9 +434,9 @@
                 </div>
             </div>
             
-            <div class="scanner-animation" id="scanner"></div>
-            
-            <button class="scan-button" id="scanButton">Escanear Tarjeta</button>
+            <button class="scan-button" id="demoButton" style="background: linear-gradient(to right, #4CAF50, #2E7D32);">
+                Modo Demostración (Sin NFC)
+            </button>
         </section>
         
         <section class="map-section" id="mapSection">
@@ -372,100 +465,234 @@
                 </div>
                 
                 <p>El horario de servicio es de lunes a domingo de 5:00 a 24:00 horas.</p>
+                
+                <div class="step" id="cardInfo" style="display: none;">
+                    <div class="step-number">ℹ</div>
+                    <div id="cardData">Información de la tarjeta escaneada aparecerá aquí</div>
+                </div>
             </div>
             
             <button class="back-button" id="backButton">Regresar al Escáner</button>
         </section>
         
         <footer>
-            <p>Proyecto para concurso con mind.js • Sistema simulado de escaneo de tarjeta del Metro CDMX</p>
-            <p>Este es un prototipo de demostración. La tarjeta y el escaneo son simulados.</p>
+            <p>Proyecto para concurso con mind.js • Sistema de escaneo NFC de tarjeta del Metro CDMX</p>
+            <p>Uso experimental - Para fines de demostración del concurso</p>
         </footer>
     </div>
 
     <script>
         // Elementos del DOM
         const scanButton = document.getElementById('scanButton');
-        const metroCard = document.getElementById('metroCard');
-        const scanner = document.getElementById('scanner');
+        const demoButton = document.getElementById('demoButton');
+        const scanArea = document.getElementById('scanArea');
+        const statusMessage = document.getElementById('statusMessage');
         const mapSection = document.getElementById('mapSection');
         const backButton = document.getElementById('backButton');
         const mapImage = document.getElementById('mapImage');
+        const cardInfo = document.getElementById('cardInfo');
+        const cardData = document.getElementById('cardData');
         
-        // Variables para simular el estado de la tarjeta
-        let cardScanned = false;
+        // Variables para control del escáner
+        let nfcScanner = null;
+        let isScanning = false;
+        let nfcSupported = false;
         
-        // Función para simular el escaneo de la tarjeta
-        function scanCard() {
-            if (cardScanned) return;
+        // Verificar compatibilidad con Web NFC API
+        function checkNFCSupport() {
+            if ('NDEFReader' in window) {
+                nfcSupported = true;
+                statusMessage.textContent = "NFC compatible. Haz clic en 'Iniciar Escáner NFC'";
+                return true;
+            } else {
+                nfcSupported = false;
+                statusMessage.textContent = "NFC no compatible con este navegador/dispositivo";
+                statusMessage.className = "status-message status-error";
+                scanButton.disabled = true;
+                return false;
+            }
+        }
+        
+        // Iniciar escaneo NFC
+        async function startNFCScan() {
+            if (!nfcSupported) {
+                statusMessage.textContent = "NFC no compatible. Usa el modo demostración.";
+                statusMessage.className = "status-message status-error";
+                return;
+            }
             
-            // Mostrar animación del escáner
-            scanner.style.display = 'block';
-            scanButton.textContent = 'Escanenado...';
-            scanButton.disabled = true;
-            metroCard.style.transform = 'scale(0.95)';
-            
-            // Simular tiempo de escaneo
-            setTimeout(() => {
-                // Ocultar animación del escáner
-                scanner.style.display = 'none';
+            try {
+                nfcScanner = new NDEFReader();
                 
-                // Mostrar el mapa
-                mapSection.style.display = 'flex';
-                document.querySelector('.metro-card-section').style.display = 'none';
+                // Configurar el escáner
+                await nfcScanner.scan();
                 
-                // Cambiar estado
-                cardScanned = true;
+                isScanning = true;
+                scanArea.classList.add('active');
+                statusMessage.textContent = "Escaneando... Acerca tu tarjeta del Metro";
+                statusMessage.className = "status-message status-scanning";
+                scanButton.textContent = "Detener Escáner";
+                scanButton.style.background = "linear-gradient(to right, #f44336, #d32f2f)";
                 
-                // Efecto de carga de la imagen del mapa
-                mapImage.style.opacity = '0';
+                // Escuchar lecturas NFC
+                nfcScanner.addEventListener("reading", ({ message, serialNumber }) => {
+                    handleNFCCardRead(message, serialNumber);
+                });
+                
+                // Manejar errores
+                nfcScanner.addEventListener("readingerror", (event) => {
+                    statusMessage.textContent = "Error al leer la tarjeta. Intenta de nuevo.";
+                    statusMessage.className = "status-message status-error";
+                    console.error("Error reading NFC:", event);
+                });
+                
+            } catch (error) {
+                console.error("Error starting NFC scan:", error);
+                statusMessage.textContent = "Error al iniciar escáner NFC: " + error.message;
+                statusMessage.className = "status-message status-error";
+                isScanning = false;
+                scanArea.classList.remove('active');
+                scanButton.textContent = "Iniciar Escáner NFC";
+                scanButton.style.background = "linear-gradient(to right, #ffde59, #ffcc00)";
+            }
+        }
+        
+        // Detener escaneo NFC
+        function stopNFCScan() {
+            if (nfcScanner && isScanning) {
+                // No hay un método stop() oficial, pero podemos "olvidar" el escáner
+                nfcScanner = null;
+                isScanning = false;
+                scanArea.classList.remove('active');
+                scanButton.textContent = "Iniciar Escáner NFC";
+                scanButton.style.background = "linear-gradient(to right, #ffde59, #ffcc00)";
+                statusMessage.textContent = "Escáner detenido. Listo para escanear.";
+                statusMessage.className = "status-message";
+            }
+        }
+        
+        // Procesar tarjeta NFC leída
+        function handleNFCCardRead(message, serialNumber) {
+            try {
+                // Mostrar información de la tarjeta escaneada
+                const cardType = "Tarjeta del Metro CDMX";
+                const cardUID = serialNumber || "N/A";
+                
+                // Simular datos de saldo y viajes (en un sistema real, esto vendría de la tarjeta)
+                const balance = Math.random() * 50 + 5; // Saldo aleatorio entre 5 y 55 pesos
+                const trips = Math.floor(Math.random() * 10); // Viajes aleatorios
+                const lastUse = new Date().toLocaleDateString('es-MX');
+                
+                // Mostrar mensaje de éxito
+                statusMessage.textContent = `✓ Tarjeta detectada: ${cardUID.substring(0, 8)}...`;
+                statusMessage.className = "status-message status-success";
+                
+                // Detener escáner
+                stopNFCScan();
+                
+                // Mostrar información de la tarjeta
+                cardInfo.style.display = "flex";
+                cardData.innerHTML = `
+                    <div><strong>Tarjeta:</strong> ${cardType}</div>
+                    <div><strong>UID:</strong> ${cardUID.substring(0, 12)}...</div>
+                    <div><strong>Saldo aproximado:</strong> $${balance.toFixed(2)} MXN</div>
+                    <div><strong>Último uso:</strong> ${lastUse}</div>
+                `;
+                
+                // Mostrar el mapa después de un breve retraso
                 setTimeout(() => {
-                    mapImage.style.transition = 'opacity 1s ease';
-                    mapImage.style.opacity = '1';
-                }, 100);
+                    showMap();
+                }, 1000);
                 
-            }, 2000);
+            } catch (error) {
+                console.error("Error processing NFC card:", error);
+                statusMessage.textContent = "Error al procesar tarjeta NFC";
+                statusMessage.className = "status-message status-error";
+            }
+        }
+        
+        // Mostrar el mapa del Tren Ligero
+        function showMap() {
+            mapSection.style.display = 'flex';
+            document.querySelector('.metro-card-section').style.display = 'none';
+            
+            // Efecto de carga de la imagen del mapa
+            mapImage.style.opacity = '0';
+            setTimeout(() => {
+                mapImage.style.transition = 'opacity 1s ease';
+                mapImage.style.opacity = '1';
+            }, 100);
         }
         
         // Función para volver al escáner
         function goBackToScanner() {
             mapSection.style.display = 'none';
             document.querySelector('.metro-card-section').style.display = 'block';
-            scanButton.textContent = 'Escanear Tarjeta';
-            scanButton.disabled = false;
-            metroCard.style.transform = 'translateY(-5px)';
-            
-            // Restablecer estado después de un breve retraso
-            setTimeout(() => {
-                cardScanned = false;
-            }, 500);
+            cardInfo.style.display = "none";
+            statusMessage.textContent = "Listo para escanear tarjeta del Metro CDMX";
+            statusMessage.className = "status-message";
         }
         
-        // Event Listeners
-        scanButton.addEventListener('click', scanCard);
-        metroCard.addEventListener('click', scanCard);
-        backButton.addEventListener('click', goBackToScanner);
-        
-        // Simular escaneo con la tecla Espacio
-        document.addEventListener('keydown', (event) => {
-            if (event.code === 'Space' && !cardScanned) {
-                event.preventDefault();
-                scanCard();
-            }
+        // Modo de demostración (sin NFC)
+        function demoMode() {
+            cardInfo.style.display = "flex";
+            cardData.innerHTML = `
+                <div><strong>Tarjeta:</strong> Metro CDMX (Modo Demostración)</div>
+                <div><strong>UID:</strong> 4A:3B:2C:1D:EF:89:01</div>
+                <div><strong>Saldo:</strong> $24.50 MXN</div>
+                <div><strong>Último uso:</strong> Hoy</div>
+            `;
             
-            // Tecla Escape para volver
-            if (event.code === 'Escape' && cardScanned) {
-                goBackToScanner();
-            }
-        });
+            statusMessage.textContent = "✓ Modo demostración activado";
+            statusMessage.className = "status-message status-success";
+            
+            // Mostrar el mapa después de un breve retraso
+            setTimeout(() => {
+                showMap();
+            }, 800);
+        }
         
-        // Efecto de parpadeo para la tarjeta (simulando chip NFC)
-        setInterval(() => {
-            if (!cardScanned) {
+        // Inicialización
+        document.addEventListener('DOMContentLoaded', () => {
+            // Verificar compatibilidad con NFC
+            checkNFCSupport();
+            
+            // Event Listeners
+            scanButton.addEventListener('click', () => {
+                if (isScanning) {
+                    stopNFCScan();
+                } else {
+                    startNFCScan();
+                }
+            });
+            
+            demoButton.addEventListener('click', demoMode);
+            
+            backButton.addEventListener('click', goBackToScanner);
+            
+            // Atajos de teclado
+            document.addEventListener('keydown', (event) => {
+                if (event.code === 'Space' && !isScanning) {
+                    event.preventDefault();
+                    startNFCScan();
+                }
+                
+                if (event.code === 'Escape' && isScanning) {
+                    stopNFCScan();
+                }
+                
+                if (event.code === 'KeyD' && event.ctrlKey) {
+                    event.preventDefault();
+                    demoMode();
+                }
+            });
+            
+            // Efecto de parpadeo para la tarjeta (simulando chip NFC)
+            setInterval(() => {
                 const chip = document.querySelector('.card-chip');
                 chip.style.opacity = chip.style.opacity === '0.7' ? '1' : '0.7';
-            }
-        }, 800);
+            }, 800);
+        });
     </script>
 </body>
 </html>
