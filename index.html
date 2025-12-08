@@ -440,7 +440,7 @@
         <section class="map-section" id="mapSection">
             <div class="map-container">
                 <h2 class="map-title">Mapa del Tren Ligero de la Ciudad de México</h2>
-                <img src="assets/linea_trenligero.jpg" alt="Mapa del Tren Ligero CDMX" class="map-image" id="mapImage">
+                <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/f/f6/Tren_Ligero_de_la_Ciudad_de_M%C3%A9xico.svg/1200px-Tren_Ligero_de_la_Ciudad_de_M%C3%A9xico.svg.png" alt="Mapa del Tren Ligero CDMX" class="map-image" id="mapImage">
             </div>
             
             <div class="instructions">
@@ -480,7 +480,7 @@
     </div>
 
     <script>
-       
+        // Elementos del DOM
         const startCameraButton = document.getElementById('startCamera');
         const stopCameraButton = document.getElementById('stopCamera');
         const demoButton = document.getElementById('demoButton');
@@ -493,11 +493,12 @@
         const cardInfo = document.getElementById('cardInfo');
         const cardData = document.getElementById('cardData');
         
-    
+        // Variables para control de la cámara
         let cameraStream = null;
         let isCameraActive = false;
         let qrScanner = null;
         
+        // Verificar compatibilidad con API de cámara
         function checkCameraSupport() {
             if (!navigator.mediaDevices || !navigator.mediaDevices.getUserMedia) {
                 statusMessage.textContent = "Tu navegador no soporta acceso a la cámara";
@@ -508,27 +509,27 @@
             return true;
         }
         
-        
+        // Activar cámara
         async function startCamera() {
             if (!checkCameraSupport()) return;
             
             try {
-              
+                // Solicitar permiso para usar la cámara
                 cameraStream = await navigator.mediaDevices.getUserMedia({
                     video: {
-                        facingMode: 'environment', 
+                        facingMode: 'environment', // Preferir cámara trasera
                         width: { ideal: 1280 },
                         height: { ideal: 720 }
                     },
                     audio: false
                 });
                 
-               
+                // Mostrar video de la cámara
                 cameraView.srcObject = cameraStream;
                 cameraView.style.display = 'block';
                 cameraPlaceholder.style.display = 'none';
                 
-               
+                // Esperar a que el video esté listo
                 await cameraView.play();
                 
                 isCameraActive = true;
@@ -537,6 +538,7 @@
                 statusMessage.textContent = "Cámara activada. Enfoca el código QR de tu tarjeta del Metro CDMX";
                 statusMessage.className = "status-message status-scanning";
                 
+                // Iniciar detección de códigos QR
                 startQRCodeDetection();
                 
             } catch (error) {
@@ -547,6 +549,7 @@
             }
         }
         
+        // Detener cámara
         function stopCamera() {
             if (cameraStream) {
                 // Detener todas las pistas de video
@@ -569,19 +572,21 @@
             statusMessage.textContent = "Cámara desactivada. Actívala para escanear el código QR";
             statusMessage.className = "status-message";
             
-      
+            // Detener detección de QR
             if (qrScanner) {
                 clearInterval(qrScanner);
                 qrScanner = null;
             }
         }
         
-     
+        // Iniciar detección de códigos QR (simulación)
         function startQRCodeDetection() {
-    
-        
+            // En un sistema real, aquí usarías una librería como jsQR o QuaggaJS
+            // Para esta demo, simularemos la detección después de un tiempo
+            
+            // Simular que estamos buscando códigos QR
             let scanAttempts = 0;
-            const maxScanAttempts = 20; 
+            const maxScanAttempts = 20; // Simular 20 intentos antes de fallar
             
             qrScanner = setInterval(() => {
                 if (!isCameraActive) {
@@ -591,7 +596,7 @@
                 
                 scanAttempts++;
                 
-            
+                // Simular diferentes estados de escaneo
                 if (scanAttempts === 3) {
                     statusMessage.textContent = "Buscando código QR...";
                 } else if (scanAttempts === 6) {
@@ -600,9 +605,9 @@
                     statusMessage.textContent = "Cámara lista para escanear";
                 }
                 
-        
+                // Simular detección exitosa después de cierto tiempo
                 if (scanAttempts >= 10 && scanAttempts <= maxScanAttempts) {
-                
+                    // 30% de probabilidad de detección en cada intento después del intento 10
                     if (Math.random() < 0.3) {
                         simulateQRCodeDetected();
                         clearInterval(qrScanner);
@@ -610,18 +615,18 @@
                     }
                 }
                 
-        
+                // Si llegamos al máximo de intentos sin detectar, sugerir modo demo
                 if (scanAttempts >= maxScanAttempts) {
                     statusMessage.textContent = "No se detectó código QR. Asegúrate de enfocar bien el código o usa el modo demostración";
                     statusMessage.className = "status-message status-error";
                     clearInterval(qrScanner);
                 }
-            }, 500); 
+            }, 500); // Intentar cada 500ms
+        }
         
-        
-    
+        // Simular que se detectó un código QR
         function simulateQRCodeDetected() {
-    
+            // Generar datos simulados de tarjeta
             const cardTypes = ["Tarjeta del Metro CDMX", "Tarjeta Recargable Metro", "Tarjeta Estudiante CDMX"];
             const cardType = cardTypes[Math.floor(Math.random() * cardTypes.length)];
             const cardUID = generateCardUID();
@@ -629,13 +634,14 @@
             const lastUse = new Date().toLocaleDateString('es-MX');
             const trips = Math.floor(Math.random() * 15);
             
-    
+            // Mostrar mensaje de éxito
             statusMessage.textContent = `✓ Código QR detectado: Tarjeta ${cardUID.substring(0, 8)}`;
             statusMessage.className = "status-message status-success";
             
-    
+            // Detener cámara
             stopCamera();
-
+            
+            // Mostrar información de la tarjeta
             cardInfo.style.display = "flex";
             cardData.innerHTML = `
                 <div><strong>Tarjeta:</strong> ${cardType}</div>
@@ -645,11 +651,13 @@
                 <div><strong>Viajes este mes:</strong> ${trips}</div>
             `;
             
+            // Mostrar el mapa después de un breve retraso
             setTimeout(() => {
                 showMap();
             }, 1500);
         }
         
+        // Generar un UID de tarjeta simulado
         function generateCardUID() {
             const chars = '0123456789ABCDEF';
             let uid = '';
@@ -659,10 +667,13 @@
             }
             return uid;
         }
+        
+        // Mostrar el mapa del Tren Ligero
         function showMap() {
             mapSection.style.display = 'flex';
             document.querySelector('.scan-section').style.display = 'none';
             
+            // Efecto de carga de la imagen del mapa
             mapImage.style.opacity = '0';
             setTimeout(() => {
                 mapImage.style.transition = 'opacity 1s ease';
@@ -670,6 +681,7 @@
             }, 100);
         }
         
+        // Función para volver al escáner
         function goBackToScanner() {
             mapSection.style.display = 'none';
             document.querySelector('.scan-section').style.display = 'block';
@@ -678,10 +690,14 @@
             statusMessage.className = "status-message";
         }
         
+        // Modo de demostración (sin cámara)
         function demoMode() {
+            // Detener cámara si está activa
             if (isCameraActive) {
                 stopCamera();
             }
+            
+            // Generar datos de demostración
             const demoData = {
                 cardType: "Tarjeta del Metro CDMX (Modo Demostración)",
                 cardUID: "4A:3B:2C:1D:EF:89:01:23",
@@ -702,15 +718,18 @@
             statusMessage.textContent = "✓ Modo demostración activado - Tarjeta simulada escaneada";
             statusMessage.className = "status-message status-success";
             
+            // Mostrar el mapa después de un breve retraso
             setTimeout(() => {
                 showMap();
             }, 800);
         }
         
+        // Inicialización
         document.addEventListener('DOMContentLoaded', () => {
-           
+            // Verificar compatibilidad con cámara
             checkCameraSupport();
             
+            // Event Listeners
             startCameraButton.addEventListener('click', startCamera);
             stopCameraButton.addEventListener('click', stopCamera);
             demoButton.addEventListener('click', demoMode);
@@ -733,14 +752,43 @@
                 }
             });
             
+            // Detener cámara al salir de la página
             window.addEventListener('beforeunload', () => {
                 if (isCameraActive) {
                     stopCamera();
                 }
             });
         });
+        
+        // Para una implementación real con detección de QR, necesitarías una librería como:
+        // 1. jsQR: https://github.com/cozmo/jsQR
+        // 2. QuaggaJS: https://github.com/serratus/quaggaJS
+        // 3. ZXing: https://github.com/zxing-js/library
+        
+        // Ejemplo básico de cómo integrar jsQR:
+        /*
+        function startRealQRCodeDetection() {
+            const canvas = document.createElement('canvas');
+            const context = canvas.getContext('2d');
+            
+            qrScanner = setInterval(() => {
+                if (!isCameraActive) return;
+                
+                canvas.width = cameraView.videoWidth;
+                canvas.height = cameraView.videoHeight;
+                context.drawImage(cameraView, 0, 0, canvas.width, canvas.height);
+                
+                const imageData = context.getImageData(0, 0, canvas.width, canvas.height);
+                const code = jsQR(imageData.data, imageData.width, imageData.height);
+                
+                if (code) {
+                    // Procesar código QR detectado
+                    processQRCode(code.data);
+                    clearInterval(qrScanner);
+                }
+            }, 100);
+        }
+        */
     </script>
 </body>
 </html>
-
-
