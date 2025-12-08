@@ -69,96 +69,20 @@
             border: 1px solid rgba(255, 255, 255, 0.2);
         }
         
-        .metro-card {
-            width: 300px;
-            height: 180px;
-            background: linear-gradient(to right, #1a3a8f, #2a5acf);
-            border-radius: 15px;
-            margin: 30px auto;
-            padding: 20px;
-            display: flex;
-            flex-direction: column;
-            justify-content: space-between;
-            box-shadow: 0 10px 20px rgba(0, 0, 0, 0.4);
-            position: relative;
-            overflow: hidden;
-            cursor: pointer;
-            transition: transform 0.3s ease;
-        }
-        
-        .metro-card:hover {
-            transform: translateY(-5px);
-        }
-        
-        .metro-card:before {
-            content: "";
-            position: absolute;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            background: linear-gradient(45deg, transparent 30%, rgba(255, 255, 255, 0.1) 50%, transparent 70%);
-            animation: shine 3s infinite linear;
-        }
-        
-        @keyframes shine {
-            0% { transform: translateX(-100%); }
-            100% { transform: translateX(100%); }
-        }
-        
-        .card-header {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-        }
-        
-        .card-title {
-            font-size: 1.2rem;
-            font-weight: bold;
-            color: #ffde59;
-        }
-        
-        .metro-logo {
-            font-size: 2rem;
-            font-weight: bold;
-            color: white;
-        }
-        
-        .card-chip {
-            width: 40px;
-            height: 30px;
-            background: linear-gradient(135deg, #d4af37, #ffde59);
-            border-radius: 5px;
-            margin-bottom: 10px;
-            position: relative;
-        }
-        
-        .card-chip:after {
-            content: "";
-            position: absolute;
-            top: 5px;
-            left: 5px;
-            right: 5px;
-            bottom: 5px;
-            border: 1px solid rgba(0, 0, 0, 0.2);
-            border-radius: 3px;
-        }
-        
-        .card-footer {
-            text-align: right;
-            color: rgba(255, 255, 255, 0.8);
-            font-size: 0.9rem;
-        }
-        
         .scan-area {
             margin: 20px auto;
-            padding: 20px;
+            padding: 30px 20px;
             border: 3px dashed #ffde59;
             border-radius: 15px;
             width: 90%;
             max-width: 400px;
             background-color: rgba(255, 255, 255, 0.05);
             transition: all 0.3s ease;
+            min-height: 250px;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
         }
         
         .scan-area.active {
@@ -175,12 +99,13 @@
         
         .scan-area h3 {
             color: #ffde59;
-            margin-bottom: 10px;
+            margin-bottom: 15px;
+            font-size: 1.5rem;
         }
         
         .nfc-icon {
-            font-size: 3rem;
-            margin: 15px 0;
+            font-size: 4rem;
+            margin: 20px 0;
             color: #ffde59;
         }
         
@@ -196,6 +121,8 @@
             margin-top: 20px;
             transition: all 0.3s ease;
             box-shadow: 0 5px 15px rgba(255, 222, 89, 0.4);
+            width: 100%;
+            max-width: 300px;
         }
         
         .scan-button:hover {
@@ -225,6 +152,7 @@
             display: flex;
             align-items: center;
             justify-content: center;
+            width: 100%;
         }
         
         .status-success {
@@ -339,30 +267,43 @@
             background-color: rgba(255, 255, 255, 0.2);
         }
         
-        .scanner-animation {
-            width: 300px;
-            height: 10px;
-            background: linear-gradient(90deg, transparent, #ffde59, transparent);
-            margin: 20px auto;
-            border-radius: 5px;
-            display: none;
-            animation: scan 2s ease-in-out infinite;
-        }
-        
-        @keyframes scan {
-            0% { transform: translateY(-90px); }
-            50% { transform: translateY(90px); }
-            100% { transform: translateY(-90px); }
-        }
-        
         .compatibility-notice {
             background-color: rgba(255, 193, 7, 0.2);
             border-left: 4px solid #ffc107;
             padding: 12px;
             border-radius: 5px;
-            margin-top: 15px;
+            margin-top: 25px;
             font-size: 0.85rem;
             color: #ffecb3;
+            width: 100%;
+        }
+        
+        .demo-section {
+            margin-top: 25px;
+            padding-top: 25px;
+            border-top: 1px solid rgba(255, 255, 255, 0.1);
+            width: 100%;
+        }
+        
+        .demo-button {
+            background: linear-gradient(to right, #4CAF50, #2E7D32);
+            color: white;
+            border: none;
+            padding: 12px 30px;
+            font-size: 1rem;
+            font-weight: bold;
+            border-radius: 50px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            box-shadow: 0 4px 10px rgba(76, 175, 80, 0.3);
+            width: 100%;
+            max-width: 300px;
+        }
+        
+        .demo-button:hover {
+            background: linear-gradient(to right, #2E7D32, #1B5E20);
+            transform: scale(1.05);
+            box-shadow: 0 6px 15px rgba(76, 175, 80, 0.4);
         }
         
         footer {
@@ -384,13 +325,18 @@
                 font-size: 2rem;
             }
             
-            .metro-card {
-                width: 280px;
-                height: 170px;
+            .scan-area {
+                min-height: 200px;
+                padding: 20px 15px;
             }
             
             .map-container, .instructions {
                 padding: 15px;
+            }
+            
+            .nfc-icon {
+                font-size: 3rem;
+                margin: 15px 0;
             }
         }
     </style>
@@ -421,28 +367,18 @@
                 <strong>Nota:</strong> Esta función requiere un dispositivo con NFC y Chrome para Android. Si no tienes NFC, puedes usar el modo de demostración.
             </div>
             
-            <div class="metro-card" id="metroCard">
-                <div class="card-header">
-                    <div class="card-title">TARJETA DE TRANSPORTE</div>
-                    <div class="metro-logo">M</div>
-                </div>
-                
-                <div class="card-chip"></div>
-                
-                <div class="card-footer">
-                    Ciudad de México • Válida en Metro y Tren Ligero
-                </div>
+            <div class="demo-section">
+                <p style="margin-bottom: 15px; color: #a8c6ff;">¿No tienes NFC o quieres probar la funcionalidad?</p>
+                <button class="demo-button" id="demoButton">
+                    Modo Demostración (Sin NFC)
+                </button>
             </div>
-            
-            <button class="scan-button" id="demoButton" style="background: linear-gradient(to right, #4CAF50, #2E7D32);">
-                Modo Demostración (Sin NFC)
-            </button>
         </section>
         
         <section class="map-section" id="mapSection">
             <div class="map-container">
                 <h2 class="map-title">Mapa del Tren Ligero de la Ciudad de México</h2>
-                <img src="assets/linea_trenligero.jpg" alt="Mapa del Tren Ligero CDMX" class="map-image" id="mapImage">
+                <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/f/f6/Tren_Ligero_de_la_Ciudad_de_M%C3%A9xico.svg/1200px-Tren_Ligero_de_la_Ciudad_de_M%C3%A9xico.svg.png" alt="Mapa del Tren Ligero CDMX" class="map-image" id="mapImage">
             </div>
             
             <div class="instructions">
@@ -686,14 +622,7 @@
                     demoMode();
                 }
             });
-            
-            // Efecto de parpadeo para la tarjeta (simulando chip NFC)
-            setInterval(() => {
-                const chip = document.querySelector('.card-chip');
-                chip.style.opacity = chip.style.opacity === '0.7' ? '1' : '0.7';
-            }, 800);
         });
     </script>
 </body>
 </html>
-
