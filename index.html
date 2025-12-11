@@ -697,15 +697,6 @@
                 trips: "8"
             };
             
-            cardInfo.style.display = "flex";
-            cardData.innerHTML = `
-                <div><strong>Tarjeta:</strong> ${demoData.cardType}</div>
-                <div><strong>UID:</strong> ${demoData.cardUID}</div>
-                <div><strong>Saldo:</strong> $${demoData.balance} MXN</div>
-                <div><strong>Último uso:</strong> ${demoData.lastUse}</div>
-                <div><strong>Viajes este mes:</strong> ${demoData.trips}</div>
-            `;
-            
             statusMessage.textContent = "✓ Modo demostración activado - Tarjeta simulada escaneada";
             statusMessage.className = "status-message status-success";
             
@@ -751,37 +742,10 @@
             });
         });
         
-        // Para una implementación real con detección de QR, necesitarías una librería como:
-        // 1. jsQR: https://github.com/cozmo/jsQR
-        // 2. QuaggaJS: https://github.com/serratus/quaggaJS
-        // 3. ZXing: https://github.com/zxing-js/library
-        
-        // Ejemplo básico de cómo integrar jsQR:
-        /*
-        function startRealQRCodeDetection() {
-            const canvas = document.createElement('canvas');
-            const context = canvas.getContext('2d');
-            
-            qrScanner = setInterval(() => {
-                if (!isCameraActive) return;
-                
-                canvas.width = cameraView.videoWidth;
-                canvas.height = cameraView.videoHeight;
-                context.drawImage(cameraView, 0, 0, canvas.width, canvas.height);
-                
-                const imageData = context.getImageData(0, 0, canvas.width, canvas.height);
-                const code = jsQR(imageData.data, imageData.width, imageData.height);
-                
-                if (code) {
-                    // Procesar código QR detectado
-                    processQRCode(code.data);
-                    clearInterval(qrScanner);
-                }
-            }, 100);
-        }
-        */
+
     </script>
 </body>
 </html>
+
 
 
