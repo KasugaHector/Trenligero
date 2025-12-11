@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Visualizador del Mapa del Tren Ligero CDMX</title>
+    <title> Mapa del Cablebus Linea 1</title>
     <style>
         * {
             margin: 0;
@@ -13,7 +13,7 @@
         }
         
         body {
-            background: linear-gradient(135deg, #1a3a8f 0%, #0c1b4d 100%);
+            background: linear-gradient(135deg, #3AC1E1 0%, #ffffff 100%);
             color: white;
             min-height: 100vh;
             padding: 20px;
@@ -389,12 +389,12 @@
     <div class="container">
         <header>
             <h1>Visualizador del Mapa del Tren Ligero CDMX</h1>
-            <p class="subtitle">Escanea el código QR de tu tarjeta del Metro con la cámara para visualizar el mapa completo del Tren Ligero</p>
+            <p class="subtitle"> Escanea Tu Tarjeta de Movilidad CDMX</p>
         </header>
         
         <section class="scan-section">
-            <h2>Escanear Tarjeta del Metro CDMX</h2>
-            <p>Usa la cámara de tu dispositivo para escanear el código QR de tu tarjeta</p>
+            <h2>Escanear Tarjeta De Movilidad CDMX</h2>
+            <p>Usa la cámara de tu dispositivo para escanear tu tarjeta</p>
             
             <div class="camera-container">
                 <div class="camera-placeholder" id="cameraPlaceholder">
@@ -444,19 +444,19 @@
             </div>
             
             <div class="instructions">
-                <h3>Información del Tren Ligero</h3>
-                <p>El Tren Ligero de la Ciudad de México es un sistema de transporte ferroviario que sirve a la zona sur de la ciudad. Actualmente cuenta con una línea que va de Tasqueña a Xochimilco.</p>
+                <h3>Información De la Cablebus Linea 1</h3>
+                <p>La Línea 1 del Cablebús conecta la zona alta de la alcaldía Gustavo A. Madero, al norte de la CDMX y cerca de los límites con el municipio de Tlalnepantla, en el Estado de México; desde la estación Indios Verdes hasta Cuautepec. Asimismo, tiene un ramal hacia la estación Tlalpexco.</p>
                 
                 <div class="step">
                     <div class="step-number">1</div>
-                    <div>Estación Terminal: Tasqueña (conexión con Metro Línea 2)</div>
+                    <div>Estación Terminal: Indios Verdes </div>
                 </div>
                 
                 <div class="step">
                     <div class="step-number">2</div>
-                    <div>Estación Terminal: Xochimilco (conexión con trenes a Cuernavaca)</div>
+                    <div> Estación Terminal: Cuautepec </div>
                 </div>
-        
+                
                 <p>El horario de servicio es de lunes a domingo de 5:00 a 24:00 horas.</p>
                 
                 <div class="step" id="cardInfo" style="display: none;">
@@ -692,6 +692,9 @@
                 trips: "8"
             };
             
+
+            ;
+            
             statusMessage.textContent = "✓ Modo demostración activado - Tarjeta simulada escaneada";
             statusMessage.className = "status-message status-success";
             
@@ -737,11 +740,6 @@
             });
         });
         
-
     </script>
 </body>
 </html>
-
-
-
-
